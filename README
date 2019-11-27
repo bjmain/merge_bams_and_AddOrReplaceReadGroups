@@ -1,0 +1,11 @@
+
+gatk MergeSamFiles --INPUT 35/markdup.bam --INPUT 1935/markdup.bam --OUTPUT 1935_merged_markdup.bam
+
+java -Xmx4g -jar /data/lib/java/picard.jar CollectMultipleMetrics INPUT=1935_merged_markdup.bam OUTPUT=1935_merged_markdup.picardstats REFERENCE_SEQUENCE=aws_pseudohap.fa 
+
+#Replace readgroups
+java -jar /data/lib/java/picard.jar AddOrReplaceReadGroups I=input.bam O=output.bam RGID=4 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=20
+for s in *_merged_markdup.bam
+do
+echo "java -Xmx4g -jar /data/lib/java/picard.jar CollectMultipleMetrics I=", $s, "O=", $s.RG.bam, "RGID=4 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=", $s
+done 
